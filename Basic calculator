@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic calculator</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(-45deg, #1e3c72, #2a5298, #00ceff, #0072ff);
+            font-family: 'poppins', sans-serif;
+            animation: gradientBG 10s ease infinite;
+            background-size: 400% 400%;
+
+        }
+        @keyframes gradientBG{
+            0% { background-position: 0% 50%; }
+            50% {background-position: 100% 50%; }
+            100% { background-position: 0% 50%;}
+        }
+        .calcuator{
+            width: 300px;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0px 5px 20px rgba(0,0,0,0,2);
+            overflow: hidden;
+        }
+        .display{
+            background: #222;
+            color: #0f0;
+            font-size: 2rem;
+            padding: 15px;
+            text-align: right;
+            border-bottom: 2px solid #444;
+            min-height: 60px;
+            word-wrap: break-word;
+        }
+        .buttons{
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+        }
+        button{
+            font-size: 1.3rem;
+            padding: 18px;
+            border: none;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #3a3a3a, #1c1c1c);
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            box-shadow:  4px 4px 10px rgba(0,0,0,0,6), -4px -4px 10px rgba(255,255,255,0.1);
+        }
+        button:hover {
+            transform :scale(1.1) ;
+            box-shadow: 6px 6px 12px rgba(255,255,255,0.15);
+        }
+        button:active {
+            transform: scale(0.95);
+            box-shadow: inset 4px 4px 8px rgba(0,0,0,0.7), inset -4px -4px 8px rgba(255,255,255,0.2);
+        }
+        .operator:hover{
+            background: #e08b00;
+        }
+        .equal {
+            grid-column: span 2;
+            background: green;
+            color: white;
+        }
+        
+            .clear{
+                background: #e60d02;
+                color: white;
+            }
+            .clear:hover {
+                background: #e12b22;
+            }
+    </style>
+</head>
+<body>
+   <div class="calculator">
+    <div class="display" id="display">0</div>
+    <div class="buttons">
+      <button class="clear" onclick="clearDisplay()">C</button>
+      <button onclick="deleteChar()">DEL</button>
+      <button onclick="appendChar('%')">%</button>
+      <button class="operator" onclick="appendChar('/')">÷</button>
+
+      <button onclick="appendChar('7')">7</button>
+      <button onclick="appendChar('8')">8</button>
+      <button onclick="appendChar('9')">9</button>
+      <button class="operator" onclick="appendChar('*')">×</button>
+
+      <button onclick="appendChar('4')">4</button>
+      <button onclick="appendChar('5')">5</button>
+      <button onclick="appendChar('6')">6</button>
+      <button class="operator" onclick="appendChar('-')">−</button>
+
+      <button onclick="appendChar('1')">1</button>
+      <button onclick="appendChar('2')">2</button>
+      <button onclick="appendChar('3')">3</button>
+      <button class="operator" onclick="appendChar('+')">+</button>
+
+      <button onclick="appendChar('0')">0</button>
+      <button onclick="appendChar('.')">.</button>
+      <button class="equal" onclick="calculate()">=</button>
+    </div>
+  </div>
+  <script>
+    const display = document.getElementById("display");
+
+    function clearDisplay() {
+        display.textContent = "0";
+    }
+    function deleteChar() {
+        display.textContent = display.textContent.slice(0, -1) || "0";
+    }
+
+    function appendChar(char) {
+        if (display.textContent === "0" && char !== ".") {
+            display.textContent = char;
+        } else {
+            display.textContent += char;
+        }
+    }
+
+    function calculate() {
+      try {
+        display.textContent = eval(display.textContent.replace("÷", "/").replace("×", "*"));
+      } catch {
+        display.textContent = "Error";
+      }
+    }
+
+    // ✅ Keyboard support
+    document.addEventListener("keydown", (e) => {
+      if ((e.key >= 0 && e.key <= 9) || ["+", "-", "*", "/", ".", "%"].includes(e.key)) {
+        appendChar(e.key);
+      } else if (e.key === "Enter" || e.key === "=") {
+        calculate();
+      } else if (e.key === "Backspace") {
+        deleteChar();
+      } else if (e.key === "Escape") {
+        clearDisplay();
+      }
+    });
+  </script>
+</body>
+</html>
